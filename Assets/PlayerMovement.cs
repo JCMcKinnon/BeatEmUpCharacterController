@@ -2,28 +2,38 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.UIElements;
 
 public class PlayerMovement : MonoBehaviour
 {
     private Vector2 dir;
     public bool moving;
     public PlayerState playerState;
-    
+    private PlayerControls controls;
+    private InputAction move;
     SpriteRenderer sr; 
 
     void Awake()
     {
-        sr = GetComponentInChildren<SpriteRenderer>();    
+        sr = GetComponentInChildren<SpriteRenderer>();
+        controls = new PlayerControls();
     }
-
+    void OnEnable()
+    {
+        move = controls.Player.Move;
+        move.Enable();
+    }
+    void OnDisable()
+    {
+        move.Disable();
+    }
     void Update()
     {
 
 
         if(playerState.currentState != PlayerState.State.dashAttack)
         {
-            dir.x = Input.GetAxis("Horizontal");
-            dir.y = Input.GetAxis("Vertical");
+            dir = move.ReadValue<Vector2>();
             transform.Translate(dir * 5 * Time.deltaTime, Space.Self);
 
         }
