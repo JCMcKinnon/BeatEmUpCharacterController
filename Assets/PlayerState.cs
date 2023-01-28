@@ -7,8 +7,6 @@ public class PlayerState : MonoBehaviour
 {
     PlayerMovement playerMovement;
     public State currentState;
-    private float idleTimer;
-    private bool countDownIdleTimer = false;
     public enum State { 
         idle,
         moving,
@@ -18,29 +16,57 @@ public class PlayerState : MonoBehaviour
     {
         playerMovement = GetComponent<PlayerMovement>();
         currentState = new State();
-        idleTimer = 1;
     }
 
     void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space))
+
+        switch (currentState)
         {
-            idleTimer = -.55f;
-            currentState = State.dashAttack;
+            case State.idle:
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    SetDashAttack();
+                }
+                if (playerMovement.moving)
+                {
+                    SetMoving();
+                }
+                break;
+            case State.moving:
+                if (Input.GetKeyDown(KeyCode.Space))
+                {
+                    SetDashAttack();
+                }
+                if (!playerMovement.moving)
+                {
+                    SetIdle();
+                }
+                break;
+            case State.dashAttack:
+                break;
+            default:
+                break;
         }
 
-        if (playerMovement.moving)
-        {
-            currentState = State.moving;
-        }
-        if(!playerMovement.moving && idleTimer > 0)
-        {
-            currentState = State.idle;
-        }
 
-        print(currentState);
 
-        idleTimer += Time.deltaTime;
+
+
         
+    }
+
+
+    public void SetIdle()
+    {
+        currentState = State.idle;
+    }
+    public void SetMoving()
+    {
+        currentState = State.moving;
+    }
+    public void SetDashAttack()
+    {
+        currentState = State.dashAttack;
     }
 }
