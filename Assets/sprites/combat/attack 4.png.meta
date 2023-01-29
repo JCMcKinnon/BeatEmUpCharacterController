@@ -1,34 +1,37 @@
 fileFormatVersion: 2
-guid: 3668265d753c39443be86ea8e9c2e5cc
+guid: f97cbee630c69fa4a9388e352b318eb9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -3391195329817988462
-    second: walkIdleCrono568_0
+      213: -1617517929589703994
+    second: attack 4_0
   - first:
-      213: -7463973882624193673
-    second: walkIdleCrono568_1
+      213: -4980844917623320644
+    second: attack 4_1
   - first:
-      213: 9043954656876029515
-    second: walkIdleCrono568_2
+      213: 1407604909396096300
+    second: attack 4_2
   - first:
-      213: 5052328711095681255
-    second: walkIdleCrono568_3
+      213: 970891756649481477
+    second: attack 4_3
   - first:
-      213: 773100027312713383
-    second: walkIdleCrono568_4
+      213: 6431238524077387135
+    second: attack 4_4
   - first:
-      213: -1207661666953190583
-    second: walkIdleCrono568_5
+      213: 4924634127832138359
+    second: attack 4_5
   - first:
-      213: -60842078055527438
-    second: walkIdleCrono568_6
+      213: -5682500048003363330
+    second: attack 4_6
   - first:
-      213: -2748646460239566395
-    second: walkIdleCrono568_7
+      213: -6732046394712814299
+    second: attack 4_7
   - first:
-      213: 899338397260882827
-    second: walkIdleCrono568_8
+      213: -884597981247651217
+    second: attack 4_8
+  - first:
+      213: -1563295472426356726
+    second: attack 4_9
   externalObjects: {}
   serializedVersion: 11
   mipmaps:
@@ -91,7 +94,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -103,7 +106,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -115,7 +118,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -127,7 +130,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
-    textureCompression: 0
+    textureCompression: 1
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -138,190 +141,211 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: walkIdleCrono568_0
+      name: attack 4_0
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 577
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6cafaf4530c6d89e0800000000000000
+      internalID: -1617517929589703994
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_1
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 513
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: cbf80c3efeb70eab0800000000000000
+      internalID: -4980844917623320644
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_2
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 449
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: c2576a01531d88310800000000000000
+      internalID: 1407604909396096300
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_3
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 385
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 505827e98ec497d00800000000000000
+      internalID: 970891756649481477
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 321
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f7da07d0d59504950800000000000000
+      internalID: 6431238524077387135
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 257
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 772433eb5a0d75440800000000000000
+      internalID: 4924634127832138359
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 193
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: efd8e924054b321b0800000000000000
+      internalID: -5682500048003363330
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_7
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 129
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 52d81bfc877f292a0800000000000000
+      internalID: -6732046394712814299
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_8
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 65
+        width: 127
+        height: 63
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: f62c4b6a2d649b3f0800000000000000
+      internalID: -884597981247651217
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: attack 4_9
       rect:
         serializedVersion: 2
         x: 0
         y: 1
-        width: 62.11111
+        width: 127
         height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+      alignment: 9
+      pivot: {x: 0.42, y: 0.23}
       border: {x: 0, y: 0, z: 0, w: 0}
       outline: []
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 2923c3a90dd00f0d0800000000000000
-      internalID: -3391195329817988462
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walkIdleCrono568_1
-      rect:
-        serializedVersion: 2
-        x: 63
-        y: 1
-        width: 62.11111
-        height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 77b4461bc43aa6890800000000000000
-      internalID: -7463973882624193673
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walkIdleCrono568_2
-      rect:
-        serializedVersion: 2
-        x: 126
-        y: 1
-        width: 62.11111
-        height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b46e5dfe7d4928d70800000000000000
-      internalID: 9043954656876029515
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walkIdleCrono568_3
-      rect:
-        serializedVersion: 2
-        x: 189
-        y: 1
-        width: 62.11111
-        height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7e08d51c13a7d1640800000000000000
-      internalID: 5052328711095681255
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walkIdleCrono568_4
-      rect:
-        serializedVersion: 2
-        x: 252
-        y: 1
-        width: 62.11111
-        height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 7aea1d7f06a9aba00800000000000000
-      internalID: 773100027312713383
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walkIdleCrono568_5
-      rect:
-        serializedVersion: 2
-        x: 315
-        y: 1
-        width: 62.11111
-        height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 9432664cc168d3fe0800000000000000
-      internalID: -1207661666953190583
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walkIdleCrono568_6
-      rect:
-        serializedVersion: 2
-        x: 378
-        y: 1
-        width: 62.11111
-        height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 2fb8a1ec378d72ff0800000000000000
-      internalID: -60842078055527438
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walkIdleCrono568_7
-      rect:
-        serializedVersion: 2
-        x: 441
-        y: 1
-        width: 62.11111
-        height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 5c9294c7b98dad9d0800000000000000
-      internalID: -2748646460239566395
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: walkIdleCrono568_8
-      rect:
-        serializedVersion: 2
-        x: 504
-        y: 1
-        width: 62.11111
-        height: 63
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: b83aa95e1871b7c00800000000000000
-      internalID: 899338397260882827
+      spriteID: a00fc0fec0f0e4ae0800000000000000
+      internalID: -1563295472426356726
       vertices: []
       indices: 
       edges: []

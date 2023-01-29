@@ -9,8 +9,12 @@ public class PlayerState : MonoBehaviour
     public State currentState;
     public enum State { 
         idle,
-        moving,
-        dashAttack
+        moving, 
+        dashAttack,
+        rangedAttack,
+        attack1,
+        attack2,
+        attack3
     }
     void Start()
     {
@@ -28,6 +32,10 @@ public class PlayerState : MonoBehaviour
                 {
                     SetDashAttack();
                 }
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    SetRangedAttack();
+                }
                 if (playerMovement.moving)
                 {
                     SetMoving();
@@ -38,6 +46,10 @@ public class PlayerState : MonoBehaviour
                 {
                     SetDashAttack();
                 }
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    SetRangedAttack();
+                }
                 if (!playerMovement.moving)
                 {
                     SetIdle();
@@ -47,13 +59,7 @@ public class PlayerState : MonoBehaviour
                 break;
             default:
                 break;
-        }
-
-
-
-
-
-        
+        }      
     }
 
 
@@ -69,4 +75,22 @@ public class PlayerState : MonoBehaviour
     {
         currentState = State.dashAttack;
     }
+    public void SetRangedAttack()
+    {
+        currentState = State.rangedAttack;
+    }
+    public void SetAttack1()
+    {
+        currentState = State.attack1;
+    }
+    public void SetAttack2()
+    {
+        currentState = State.attack2;
+
+    }
+    public void SetAttack3()
+    {
+        currentState = State.attack3;
+    }
+
 }

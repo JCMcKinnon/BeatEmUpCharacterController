@@ -31,15 +31,11 @@ public class PlayerMovement : MonoBehaviour
     {
 
 
-        if(playerState.currentState != PlayerState.State.dashAttack)
+        if(playerState.currentState != PlayerState.State.dashAttack && playerState.currentState != PlayerState.State.rangedAttack)
         {
             dir = move.ReadValue<Vector2>();
-            transform.Translate(dir * 5 * Time.deltaTime, Space.Self);
-
+            transform.Translate(dir * 4.5f * Time.deltaTime, Space.Self);
         }
-
-
-
         if (dir != Vector2.zero)
         {
             moving = true;
@@ -52,7 +48,7 @@ public class PlayerMovement : MonoBehaviour
         if(playerState.currentState == PlayerState.State.dashAttack)
         {
             int flipX = sr.flipX == true ? -1 : 1;
-            transform.Translate(transform.right * flipX * Time.deltaTime * 2.5f);
+            transform.Translate(transform.right * flipX * Time.deltaTime * 6.5f);
         }
     }
 

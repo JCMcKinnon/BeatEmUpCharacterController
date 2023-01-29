@@ -26,5 +26,9 @@ public class PlayerAnimation : MonoBehaviour
         {
             anim.Play("dashAttack");
         }
+        if (playerState.currentState == PlayerState.State.rangedAttack)
+        {
+            anim.Play("Attack4");
+        }
     }
 }

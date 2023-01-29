@@ -22,4 +22,16 @@ public class AnimationEventHelper : MonoBehaviour
     {
         ps.SetIdle();
     }
+    public void SetAttack3()
+    {
+        ps.SetAttack3();
+    }
+    public void SetAttack2()
+    {
+        ps.SetAttack2();
+    }
+    public void SetAttack1()
+    {
+        ps.SetAttack1();
+    }
 }
