@@ -31,17 +31,18 @@ public class PlayerMovement : MonoBehaviour
     {
         //if not dash attack or ranged attack
         //take in input and move character
-        if (playerState.currentState != PlayerState.State.dashAttack && playerState.currentState != PlayerState.State.rangedAttack)
+        if (playerState.currentState != PlayerState.State.dashAttack && playerState.currentState != PlayerState.State.rangedAttack && playerState.currentState != PlayerState.State.attack1 && playerState.currentState != PlayerState.State.attack2 && playerState.currentState != PlayerState.State.attack3)
         {
             dir = move.ReadValue<Vector2>();
             transform.Translate(dir * 4.5f * Time.deltaTime, Space.Self);
         }
         //if dash attacking or ranged attacking
         //slow down movement
-        if (playerState.currentState == PlayerState.State.dashAttack || playerState.currentState == PlayerState.State.rangedAttack)
+        if (playerState.currentState == PlayerState.State.dashAttack || playerState.currentState == PlayerState.State.rangedAttack || playerState.currentState == PlayerState.State.attack1
+            || playerState.currentState == PlayerState.State.attack2 || playerState.currentState == PlayerState.State.attack3)
         {
             dir = move.ReadValue<Vector2>();
-            transform.Translate(dir * 2.5f * Time.deltaTime, Space.Self);
+            transform.Translate(dir * 0.5f * Time.deltaTime, Space.Self);
         }
         //if input is bigger than zero, move and flip sprite based on direction
         if (dir != Vector2.zero)
@@ -58,10 +59,14 @@ public class PlayerMovement : MonoBehaviour
             moving = false;
         }
         //if dash attacking, make player dash in direction sprite is facing
-        if(playerState.currentState == PlayerState.State.dashAttack)
+        if(playerState.currentState == PlayerState.State.dashAttack )
         {
             int flipX = sr.flipX == true ? -1 : 1;
-            transform.Translate(transform.right * flipX * Time.deltaTime * 6.5f);
+            if(playerState.currentState == PlayerState.State.dashAttack)
+            {
+                transform.Translate(transform.right * flipX * Time.deltaTime * 6.5f);
+            }
+
         }
     }
 

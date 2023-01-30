@@ -34,4 +34,15 @@ public class AnimationEventHelper : MonoBehaviour
     {
         ps.SetAttack1();
     }
+    public void IsAcceptingInput()
+    {
+        ps.AcceptInput();
+    }
+    public void IsNotAcceptingInput() { 
+        ps.DoNotAcceptInput();
+    }
+    public void AttackFinished()
+    {
+        ps.AttackFinished();
+    }
 }

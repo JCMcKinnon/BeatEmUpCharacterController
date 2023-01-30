@@ -7,6 +7,11 @@ public class PlayerState : MonoBehaviour
 {
     PlayerMovement playerMovement;
     public State currentState;
+    private bool isAcceptingInput;
+    private bool currentlyAttacking;
+    private bool confirmNextAttack;
+
+    private int inputbuffer = 0;
     public enum State { 
         idle,
         moving, 
@@ -24,7 +29,7 @@ public class PlayerState : MonoBehaviour
 
     void Update()
     {
-
+        print(inputbuffer);
         switch (currentState)
         {
             case State.idle:
@@ -34,11 +39,15 @@ public class PlayerState : MonoBehaviour
                 }
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    SetRangedAttack();
+                    SetAttack1();
                 }
                 if (playerMovement.moving)
                 {
                     SetMoving();
+                }
+                if (Input.GetKeyDown(KeyCode.DownArrow))
+                {
+                    SetRangedAttack();
                 }
                 break;
             case State.moving:
@@ -46,7 +55,7 @@ public class PlayerState : MonoBehaviour
                 {
                     SetDashAttack();
                 }
-                if (Input.GetKeyDown(KeyCode.RightArrow))
+                if (Input.GetKeyDown(KeyCode.DownArrow))
                 {
                     SetRangedAttack();
                 }
@@ -54,8 +63,105 @@ public class PlayerState : MonoBehaviour
                 {
                     SetIdle();
                 }
+                if (Input.GetKeyDown(KeyCode.RightArrow))
+                {
+                    SetAttack1();
+                }
                 break;
             case State.dashAttack:
+                if (isAcceptingInput)
+                {
+                    if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        confirmNextAttack = true;
+                    }
+                }
+                if (!currentlyAttacking)
+                {
+                    if (confirmNextAttack)
+                    {
+                        inputbuffer = 0;
+                        SetAttack1();
+                    }
+                    else
+                    {
+                        SetIdle();
+                    }
+                }
+                break;
+            case State.attack1:
+                
+                if (isAcceptingInput && currentState == State.attack1)
+                {
+                    if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        confirmNextAttack = true;
+                        inputbuffer++;
+                    }
+                }
+                if (confirmNextAttack)
+                {
+                    if (currentlyAttacking == false)
+                    {
+                        confirmNextAttack = false;
+                        currentState = State.attack2;                    
+                    }
+                }
+                else
+                {
+                    if (currentlyAttacking == false)
+                    {
+                        confirmNextAttack = false;
+                        inputbuffer = 0;
+                        currentState = State.idle;
+                    }
+                }
+                break; 
+            case State.attack2:
+                if (isAcceptingInput)
+                {
+                    if (Input.GetKeyDown(KeyCode.RightArrow))
+                    {
+                        confirmNextAttack = true;
+                        inputbuffer++;
+                    }
+                }
+                if (confirmNextAttack)
+                {
+                    if (currentlyAttacking == false)
+                    {
+
+                        confirmNextAttack = false;
+
+                       
+                         currentState = State.attack3;
+                        
+                    }
+
+                }
+               
+                    if (inputbuffer >= 2 && !currentlyAttacking)
+                    {
+                        currentState = State.attack3;
+                    }
+                
+     
+                else
+                {
+                    if (currentlyAttacking == false)
+                    {
+                        confirmNextAttack = false;
+                        inputbuffer = 0;
+                        currentState = State.idle;
+                    }
+                }
+                break; 
+            case State.attack3:
+                if(currentlyAttacking== false)
+                {
+                    inputbuffer = 0;
+                    currentState = State.idle;
+                }
                 break;
             default:
                 break;
@@ -91,6 +197,19 @@ public class PlayerState : MonoBehaviour
     public void SetAttack3()
     {
         currentState = State.attack3;
+    }
+    public void AcceptInput()
+    {
+        isAcceptingInput= true;
+        currentlyAttacking = true;
+    }
+    public void DoNotAcceptInput()
+    {
+        isAcceptingInput= false;
+    }
+    public void AttackFinished()
+    {
+        currentlyAttacking= false;  
     }
 
 }
