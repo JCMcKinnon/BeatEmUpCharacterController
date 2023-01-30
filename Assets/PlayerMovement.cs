@@ -29,22 +29,35 @@ public class PlayerMovement : MonoBehaviour
     }
     void Update()
     {
-
-
-        if(playerState.currentState != PlayerState.State.dashAttack && playerState.currentState != PlayerState.State.rangedAttack)
+        //if not dash attack or ranged attack
+        //take in input and move character
+        if (playerState.currentState != PlayerState.State.dashAttack && playerState.currentState != PlayerState.State.rangedAttack)
         {
             dir = move.ReadValue<Vector2>();
             transform.Translate(dir * 4.5f * Time.deltaTime, Space.Self);
         }
+        //if dash attacking or ranged attacking
+        //slow down movement
+        if (playerState.currentState == PlayerState.State.dashAttack || playerState.currentState == PlayerState.State.rangedAttack)
+        {
+            dir = move.ReadValue<Vector2>();
+            transform.Translate(dir * 2.5f * Time.deltaTime, Space.Self);
+        }
+        //if input is bigger than zero, move and flip sprite based on direction
         if (dir != Vector2.zero)
         {
             moving = true;
-            FlipSpriteBasedOnInput();
+
+            if(playerState.currentState != PlayerState.State.dashAttack && playerState.currentState != PlayerState.State.rangedAttack)
+            {
+                FlipSpriteBasedOnInput();
+            }
         }
         else
         {
             moving = false;
         }
+        //if dash attacking, make player dash in direction sprite is facing
         if(playerState.currentState == PlayerState.State.dashAttack)
         {
             int flipX = sr.flipX == true ? -1 : 1;

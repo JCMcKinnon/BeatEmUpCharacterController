@@ -30,5 +30,18 @@ public class PlayerAnimation : MonoBehaviour
         {
             anim.Play("Attack4");
         }
+        if(playerState.currentState == PlayerState.State.attack1)
+        {
+            anim.Play("Attack1");
+        }
+        if (playerState.currentState == PlayerState.State.attack2)
+        {
+            anim.Play("Attack2");
+        }
+        if (playerState.currentState == PlayerState.State.attack3)
+        {
+            anim.Play("Attack3");
+        }
+
     }
 }
