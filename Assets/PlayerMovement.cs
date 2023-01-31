@@ -49,7 +49,7 @@ public class PlayerMovement : MonoBehaviour
         {
             moving = true;
 
-            if(playerState.currentState != PlayerState.State.dashAttack && playerState.currentState != PlayerState.State.rangedAttack)
+            if(playerState.currentState == PlayerState.State.moving || playerState.currentState == PlayerState.State.idle)
             {
                 FlipSpriteBasedOnInput();
             }

@@ -29,7 +29,6 @@ public class PlayerState : MonoBehaviour
 
     void Update()
     {
-        print(inputbuffer);
         switch (currentState)
         {
             case State.idle:
@@ -74,6 +73,7 @@ public class PlayerState : MonoBehaviour
                     if (Input.GetKeyDown(KeyCode.RightArrow))
                     {
                         confirmNextAttack = true;
+                        print(inputbuffer);
                     }
                 }
                 if (!currentlyAttacking)
@@ -81,6 +81,7 @@ public class PlayerState : MonoBehaviour
                     if (confirmNextAttack)
                     {
                         inputbuffer = 0;
+                        confirmNextAttack= false;
                         SetAttack1();
                     }
                     else
