@@ -12,6 +12,18 @@ public class PlayerState : MonoBehaviour
     private bool confirmNextAttack;
 
     private int inputbuffer = 0;
+    private delegate void AttackDelegate();
+    private AttackDelegate nextAttack;
+    Dictionary<KeyCode, AttackDelegate> InputsByAttack = new Dictionary<KeyCode, AttackDelegate>();
+    public enum Inputs { 
+        space,
+        left,
+        right,
+        up,
+        down,
+        shift
+    }
+
     public enum State { 
         idle,
         moving, 
@@ -26,6 +38,14 @@ public class PlayerState : MonoBehaviour
         playerMovement = GetComponent<PlayerMovement>();
         currentState = new State();
     }
+    private void Awake()
+    {
+        InputsByAttack.Add(KeyCode.Space, SetDashAttack);
+        InputsByAttack.Add(KeyCode.RightArrow, SetAttack1);
+        InputsByAttack.Add(KeyCode.DownArrow, SetRangedAttack);
+        nextAttack = new AttackDelegate(SetIdle);
+
+    }
 
     void Update()
     {
@@ -34,11 +54,15 @@ public class PlayerState : MonoBehaviour
             case State.idle:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    SetDashAttack();
+                   nextAttack = InputsByAttack[KeyCode.Space];
+                   nextAttack.Invoke();
+
                 }
                 if (Input.GetKeyDown(KeyCode.RightArrow))
                 {
-                    SetAttack1();
+                   nextAttack = InputsByAttack[KeyCode.RightArrow];
+                   nextAttack.Invoke();
+
                 }
                 if (playerMovement.moving)
                 {
@@ -70,11 +94,7 @@ public class PlayerState : MonoBehaviour
             case State.dashAttack:
                 if (isAcceptingInput)
                 {
-                    if (Input.GetKeyDown(KeyCode.RightArrow))
-                    {
-                        confirmNextAttack = true;
-                        print(inputbuffer);
-                    }
+
                 }
                 if (!currentlyAttacking)
                 {
@@ -210,7 +230,15 @@ public class PlayerState : MonoBehaviour
     }
     public void AttackFinished()
     {
-        currentlyAttacking= false;  
-    }
+        currentlyAttacking= false;
+        nextAttack.Invoke();
 
+    }
+    public void TakeInputForNextAttack(KeyCode input)
+    {
+            confirmNextAttack = true;
+            nextAttack = InputsByAttack[input]; 
+        //left off here, looking for Input.ReturnKeyCode
+        //so that can just set nextAttack by user input.
+    }
 }
