@@ -2,27 +2,39 @@
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using UnityEngine.InputSystem.Utilities;
 
 public class PlayerState : MonoBehaviour
 {
+    //Dependencies--------
     PlayerMovement playerMovement;
+    //--------------------
+    
+    //State---------------
     public State currentState;
+    public State requestState;
+    //--------------------
+   
+    //private fields------
     private bool isAcceptingInput;
     private bool currentlyAttacking;
     private bool confirmNextAttack;
+    //--------------------
 
-    private int inputbuffer = 0;
-    private delegate void AttackDelegate();
-    private AttackDelegate nextAttack;
-    Dictionary<KeyCode, AttackDelegate> InputsByAttack = new Dictionary<KeyCode, AttackDelegate>();
-    public enum Inputs { 
-        space,
-        left,
-        right,
-        up,
-        down,
-        shift
-    }
+    //input---------------
+    private PlayerControls controls;
+    private InputAction regularAttack;
+    private InputAction move;
+    private InputAction ranged;
+    //--------------------
+
+    //buffer--------------
+    [SerializeField] public Queue<State> inputQueue;
+    int inputbuffer;
+    private bool requestingStateChange;
+    float queueTimer;
+    //--------------------
+
 
     public enum State { 
         idle,
@@ -33,160 +45,146 @@ public class PlayerState : MonoBehaviour
         attack2,
         attack3
     }
-    void Start()
-    {
-        playerMovement = GetComponent<PlayerMovement>();
-        currentState = new State();
-    }
     private void Awake()
     {
-        InputsByAttack.Add(KeyCode.Space, SetDashAttack);
-        InputsByAttack.Add(KeyCode.RightArrow, SetAttack1);
-        InputsByAttack.Add(KeyCode.DownArrow, SetRangedAttack);
-        nextAttack = new AttackDelegate(SetIdle);
+        controls = new PlayerControls();
+        playerMovement = GetComponent<PlayerMovement>();
+        currentState = new State();
+        requestState = new State();
+        requestState = State.idle;
+        inputQueue = new Queue<State>();
+    }
+    private void OnEnable()
+    {
+        regularAttack = controls.Player.regularAttack;
+        regularAttack.Enable();
 
+        move = controls.Player.Move;
+        move.Enable();
+
+        ranged = controls.Player.Fire;
+        ranged.Enable();
+
+        move.performed += SetMoving;
+        regularAttack.performed += BasicAttack;
+        ranged.started += SetRangedAttack;
+    }
+    private void OnDisable()
+    {
+        regularAttack.Disable();
+        move.Disable();
     }
 
     void Update()
     {
+        if(inputQueue.Count > 4)
+        {
+            inputQueue.Clear();
+        }
         switch (currentState)
         {
             case State.idle:
-                if (Input.GetKeyDown(KeyCode.Space))
+                isAcceptingInput = true;
+                if (move.IsInProgress())
                 {
-                   nextAttack = InputsByAttack[KeyCode.Space];
-                   nextAttack.Invoke();
-
+                    currentState = State.moving;
                 }
-                if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                   nextAttack = InputsByAttack[KeyCode.RightArrow];
-                   nextAttack.Invoke();
-
-                }
-                if (playerMovement.moving)
-                {
-                    SetMoving();
-                }
-                if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    SetRangedAttack();
-                }
+                VerifyStateRequest();
                 break;
             case State.moving:
-                if (Input.GetKeyDown(KeyCode.Space))
+                isAcceptingInput = true;
+                if(!move.IsInProgress())
                 {
-                    SetDashAttack();
+                    currentState = State.idle;
                 }
-                if (Input.GetKeyDown(KeyCode.DownArrow))
-                {
-                    SetRangedAttack();
-                }
-                if (!playerMovement.moving)
-                {
-                    SetIdle();
-                }
-                if (Input.GetKeyDown(KeyCode.RightArrow))
-                {
-                    SetAttack1();
-                }
+                VerifyStateRequest();
+
                 break;
             case State.dashAttack:
-                if (isAcceptingInput)
+                if (move.IsInProgress() && currentlyAttacking != true)
                 {
+                    currentState = State.moving;
+                }
+                if (!currentlyAttacking && isAcceptingInput == false)
+                {
+                    currentState = State.idle;
+                }
 
+               
+                    VerifyStateRequest();
+                
+                break;
+            case State.rangedAttack:
+                if (move.IsInProgress() && currentlyAttacking != true)
+                {
+                    currentState = State.moving;
+                }
+                if (!currentlyAttacking && isAcceptingInput == false)
+                {
+                    currentState = State.idle;
+                }
+                if (inputQueue.Count == 0 && !currentlyAttacking)
+                {
+                    inputbuffer = 0;
+                }
+
+                VerifyStateRequest();
+                break;
+            case State.attack1:
+                if (move.IsInProgress() && currentlyAttacking != true)
+                {
+                    currentState = State.moving;
+                }
+                if (!currentlyAttacking && isAcceptingInput == false)
+                {
+                    currentState = State.idle;
+                }
+                if (inputQueue.Count == 0 && !currentlyAttacking)
+                {
+                    inputbuffer = 0;
+                }
+
+                VerifyStateRequest();
+                
+                break;
+            case State.attack2:
+                if (move.IsInProgress() && currentlyAttacking != true)
+                {
+                    currentState = State.moving;
+                }
+                if (!currentlyAttacking && isAcceptingInput == false)
+                {
+                    currentState = State.idle;
+                }
+                if (inputQueue.Count == 0 && !currentlyAttacking)
+                {
+                    inputbuffer = 0;
+                }
+
+                VerifyStateRequest();
+                
+                break;
+            case State.attack3:
+                if (move.IsInProgress() && currentlyAttacking != true)
+                {
+                    currentState = State.moving;
                 }
                 if (!currentlyAttacking)
                 {
-                    if (confirmNextAttack)
-                    {
-                        inputbuffer = 0;
-                        confirmNextAttack= false;
-                        SetAttack1();
-                    }
-                    else
-                    {
-                        SetIdle();
-                    }
-                }
-                break;
-            case State.attack1:
-                
-                if (isAcceptingInput && currentState == State.attack1)
-                {
-                    if (Input.GetKeyDown(KeyCode.RightArrow))
-                    {
-                        confirmNextAttack = true;
-                        inputbuffer++;
-                    }
-                }
-                if (confirmNextAttack)
-                {
-                    if (currentlyAttacking == false)
-                    {
-                        confirmNextAttack = false;
-                        currentState = State.attack2;                    
-                    }
-                }
-                else
-                {
-                    if (currentlyAttacking == false)
-                    {
-                        confirmNextAttack = false;
-                        inputbuffer = 0;
-                        currentState = State.idle;
-                    }
-                }
-                break; 
-            case State.attack2:
-                if (isAcceptingInput)
-                {
-                    if (Input.GetKeyDown(KeyCode.RightArrow))
-                    {
-                        confirmNextAttack = true;
-                        inputbuffer++;
-                    }
-                }
-                if (confirmNextAttack)
-                {
-                    if (currentlyAttacking == false)
-                    {
-
-                        confirmNextAttack = false;
-
-                       
-                         currentState = State.attack3;
-                        
-                    }
-
-                }
-               
-                    if (inputbuffer >= 2 && !currentlyAttacking)
-                    {
-                        currentState = State.attack3;
-                    }
-                
-     
-                else
-                {
-                    if (currentlyAttacking == false)
-                    {
-                        confirmNextAttack = false;
-                        inputbuffer = 0;
-                        currentState = State.idle;
-                    }
-                }
-                break; 
-            case State.attack3:
-                if(currentlyAttacking== false)
-                {
-                    inputbuffer = 0;
                     currentState = State.idle;
                 }
+                if (inputQueue.Count == 0 && !currentlyAttacking)
+                {
+                    inputbuffer = 0;
+                }
+                VerifyStateRequest();
+                
+
                 break;
             default:
                 break;
-        }      
+        }
+
     }
 
 
@@ -194,51 +192,118 @@ public class PlayerState : MonoBehaviour
     {
         currentState = State.idle;
     }
-    public void SetMoving()
+    public void SetMoving(InputAction.CallbackContext context)
     {
-        currentState = State.moving;
+        if (!currentlyAttacking)
+        {
+            currentState = State.moving;
+        }
     }
-    public void SetDashAttack()
+    public void SetDashAttack(InputAction.CallbackContext context)
     {
-        currentState = State.dashAttack;
+        if (isAcceptingInput)
+            inputQueue.Enqueue(State.dashAttack);
+
+        /*        currentlyAttacking = true;
+                requestState = State.dashAttack;*/
     }
-    public void SetRangedAttack()
+    public void SetRangedAttack(InputAction.CallbackContext context)
     {
-        currentState = State.rangedAttack;
+
+        if (isAcceptingInput)
+            
+            inputQueue.Enqueue(State.rangedAttack);
+
+        /* currentlyAttacking = true;
+        requestState = State.rangedAttack;*/
     }
-    public void SetAttack1()
+    public void SetAttack1(InputAction.CallbackContext context)
     {
-        currentState = State.attack1;
+        if (isAcceptingInput)
+        inputQueue.Enqueue(State.attack1);
     }
-    public void SetAttack2()
+    public void BasicAttack(InputAction.CallbackContext context)
     {
-        currentState = State.attack2;
+
+        inputbuffer++;
+        print(inputbuffer);
+        if (isAcceptingInput)
+        {
+            if (inputbuffer==1)
+            {
+
+                    inputQueue.Enqueue(State.attack1);
+                    return;
+                
+            }
+        
+            if(inputbuffer==2)
+            {
+                    inputQueue.Enqueue(State.attack2);
+                    return;
+
+                
+            }
+
+            if(inputbuffer==3)
+            {                
+                    inputQueue.Enqueue(State.attack3);
+                    print(inputbuffer);
+
+                return;
+                
+            }
+
+        }
+
 
     }
-    public void SetAttack3()
+    public void SetAttack2(InputAction.CallbackContext context)
     {
-        currentState = State.attack3;
+
+        if (isAcceptingInput)
+            inputQueue.Enqueue(State.attack2);
+        /* currentlyAttacking = true;       
+        requestState = State.attack2;*/
+
     }
+    public void SetAttack3(InputAction.CallbackContext context)
+    {
+        if (isAcceptingInput)
+            inputQueue.Enqueue(State.attack3);
+            inputbuffer = 0;
+        /*currentlyAttacking = true;
+        requestState = State.attack3;*/
+    }
+    public void VerifyStateRequest()
+    {
+        if (!currentlyAttacking) //if called during idle, walking or at the very end of an animation
+        {
+            if (inputQueue.Count != 0)
+            {
+                currentlyAttacking = true; //preemptive currentlyattacking flag
+                currentState = inputQueue.Dequeue();
+            }
+        }
+        
+    }
+
+    //Called from animation events----------------
     public void AcceptInput()
     {
+        //as long as animation is playing, accept input
         isAcceptingInput= true;
         currentlyAttacking = true;
     }
     public void DoNotAcceptInput()
     {
+        //at the 3/4 point of an animation, stop accepting input for next attack
         isAcceptingInput= false;
     }
     public void AttackFinished()
     {
-        currentlyAttacking= false;
-        nextAttack.Invoke();
-
+        //end of the attack happened, used for initiating the next attack in a sequence.
+        currentlyAttacking = false;
     }
-    public void TakeInputForNextAttack(KeyCode input)
-    {
-            confirmNextAttack = true;
-            nextAttack = InputsByAttack[input]; 
-        //left off here, looking for Input.ReturnKeyCode
-        //so that can just set nextAttack by user input.
-    }
+    //--------------------------------------------
 }

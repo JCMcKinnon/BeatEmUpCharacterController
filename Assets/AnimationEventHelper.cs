@@ -12,27 +12,27 @@ public class AnimationEventHelper : MonoBehaviour
     }
     public void SetDash()
     {
-        ps.SetDashAttack();
+        ps.currentState = PlayerState.State.dashAttack;
     }
     public void SetWalk()
     {
-        ps.SetMoving();
+        ps.currentState = PlayerState.State.moving;
     }
     public void SetIdle()
     {
-        ps.SetIdle();
+        ps.currentState = PlayerState.State.idle;
     }
     public void SetAttack3()
     {
-        ps.SetAttack3();
+        ps.currentState = PlayerState.State.attack3;
     }
     public void SetAttack2()
     {
-        ps.SetAttack2();
+        ps.currentState = PlayerState.State.attack2;
     }
     public void SetAttack1()
     {
-        ps.SetAttack1();
+        ps.currentState = PlayerState.State.attack1;
     }
     public void IsAcceptingInput()
     {
