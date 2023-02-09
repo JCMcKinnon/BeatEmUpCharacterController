@@ -114,7 +114,7 @@ public class PlayerState : MonoBehaviour
     }
     private void UpdateInputDuringAttack()
     {
-        if (move.IsInProgress() && currentlyAttacking != true)
+        if (move.IsInProgress() && !currentlyAttacking)
         {
             currentState = State.moving;
         }
