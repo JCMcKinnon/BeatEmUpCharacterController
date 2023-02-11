@@ -42,7 +42,7 @@ public class PlayerMovement : MonoBehaviour
             || playerState.currentState == PlayerState.State.attack2 || playerState.currentState == PlayerState.State.attack3)
         {
             dir = move.ReadValue<Vector2>();
-            transform.Translate(dir * 0.5f * Time.deltaTime, Space.Self);
+            transform.Translate(dir * 0.3f * Time.deltaTime, Space.Self);
         }
         //if input is bigger than zero, move and flip sprite based on direction
         if (dir != Vector2.zero)
