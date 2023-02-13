@@ -5,14 +5,18 @@ using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.Utilities;
 
 public class PlayerState : MonoBehaviour
-{   
+{
+    //references----------
+    private BoxCollider2D collider2D;
+    //--------------------
+    
     //State---------------
     public State currentState;
     //--------------------
    
     //private fields------
     private bool isAcceptingInput;
-    private bool currentlyAttacking;
+    public bool currentlyAttacking;
     //--------------------
 
     //input---------------
@@ -40,6 +44,7 @@ public class PlayerState : MonoBehaviour
         controls = new PlayerControls();
         currentState = new State();
         inputQueue = new Queue<State>();
+        collider2D = GetComponentInChildren<BoxCollider2D>();  
     }
     private void OnEnable()
     {
@@ -55,7 +60,7 @@ public class PlayerState : MonoBehaviour
         //subscribe events---------------
         move.performed += SetMoving;
         regularAttack.performed += BasicAttack;
-        ranged.started += SetRangedAttack;
+        ranged.started += SetDashAttack;
         //-------------------------------
     }
     private void OnDisable()
@@ -170,7 +175,6 @@ public class PlayerState : MonoBehaviour
             if(inputbuffer==3)
             {                
                 inputQueue.Enqueue(State.attack3);
-                print(inputbuffer);
                 return;              
             }
         }
@@ -204,4 +208,5 @@ public class PlayerState : MonoBehaviour
         currentlyAttacking = false;
     }
     //--------------------------------------------
+
 }

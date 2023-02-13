@@ -6,6 +6,7 @@ public class EnemyFSM : MonoBehaviour
 {
     //references--------------
     private GameObject player;
+    private PlayerState playerState;
     private Camera cam;
     private SpriteRenderer sr;
     //------------------------
@@ -14,9 +15,12 @@ public class EnemyFSM : MonoBehaviour
 
     private Vector3 patrolPointOne;
     private Vector3 patrolPointTwo;
+
+    [SerializeField] private float maxDistanceToPlayer;
     private void Awake()
     {
         player = GameObject.FindWithTag("Player");
+        playerState = player.GetComponent<PlayerState>();
         cam = Camera.main;
         sr = GetComponentInChildren<SpriteRenderer>();
     }
@@ -36,6 +40,10 @@ public class EnemyFSM : MonoBehaviour
     }
     void Update()
     {
+        if (Vector3.Distance(player.transform.position, transform.position) < maxDistanceToPlayer)
+        {
+            state = EnemyState.persuing;
+        }
         switch (state)
         {
             case EnemyState.idle:
@@ -79,6 +87,7 @@ public class EnemyFSM : MonoBehaviour
                 FollowPlayer();
                 break;
                
+
         }
     }
 
@@ -88,12 +97,20 @@ public class EnemyFSM : MonoBehaviour
         if(Vector2.Distance(player.transform.position, transform.position) > 0.5f)
         {
             transform.Translate(directionToPlayer * Time.deltaTime * speed, Space.Self);
+            if(directionToPlayer.x < 0f)
+            {
+                sr.flipX = true;
+            }
+            else
+            {
+                sr.flipX= false;
+            }
         }
     }
     private void SelectPatrolPoints()
     {       
         patrolPointOne = transform.position;
-        patrolPointTwo = transform.position + new Vector3(Random.Range(-10,10),transform.position.y,transform.position.z);
+        patrolPointTwo = transform.position + new Vector3(Random.Range(-10,10),0,0);
         if(cam.WorldToViewportPoint(patrolPointTwo).x > 0 && cam.WorldToViewportPoint(patrolPointTwo).x < 1)
         {
             print("success " + patrolPointTwo);
@@ -104,6 +121,16 @@ public class EnemyFSM : MonoBehaviour
         {
             print("failed " + patrolPointTwo);
             return;
+        }
+    }   
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.tag == "PlayerSword")
+        {
+            if (playerState.currentlyAttacking)
+            {
+                print("hit");
+            }
         }
     }
 }

@@ -11,12 +11,15 @@ public class PlayerMovement : MonoBehaviour
     public PlayerState playerState;
     private PlayerControls controls;
     private InputAction move;
-    SpriteRenderer sr; 
+    SpriteRenderer sr;
+    public BoxCollider2D col;
 
+    private bool hitEnemy;
     void Awake()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
         controls = new PlayerControls();
+        hitEnemy = false;
     }
     void OnEnable()
     {
@@ -59,14 +62,24 @@ public class PlayerMovement : MonoBehaviour
             moving = false;
         }
         //if dash attacking, make player dash in direction sprite is facing
-        if(playerState.currentState == PlayerState.State.dashAttack )
+        if(playerState.currentState == PlayerState.State.dashAttack && !hitEnemy)
         {
             int flipX = sr.flipX == true ? -1 : 1;
             if(playerState.currentState == PlayerState.State.dashAttack)
             {
                 transform.Translate(transform.right * flipX * Time.deltaTime * 6.5f);
             }
+        }
+        if (sr.flipX)
+        {
+            col.offset = new Vector2(-0.8f, 0.1f);
+            print("aser");
 
+        }
+        else
+        {
+            col.offset = new Vector2(0, 0.1f);
+            print("aser");
         }
     }
 
@@ -82,5 +95,18 @@ public class PlayerMovement : MonoBehaviour
             var sr = GetComponentInChildren<SpriteRenderer>();
             sr.flipX = false;
         }
+    }
+    void OnTriggerEnter2D(Collider2D col)
+    {
+        if(col.tag == "Enemy")
+        {
+            hitEnemy = true;
+            StartCoroutine(SetHitEnemyFlag());
+        }
+    }
+    public IEnumerator SetHitEnemyFlag()
+    {
+        yield return new WaitForSeconds(0.1f);
+        hitEnemy= false;
     }
 }
