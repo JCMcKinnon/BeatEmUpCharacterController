@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Resources;
 using UnityEngine;
 
 public class EnemyFSM : MonoBehaviour
@@ -16,11 +17,16 @@ public class EnemyFSM : MonoBehaviour
     private Vector3 patrolPointOne;
     private Vector3 patrolPointTwo;
 
+    private Animator anim;
+    private bool canDamage;
+    public bool finishedAnim;
     [SerializeField] private float maxDistanceToPlayer;
+    public int pain;
     private void Awake()
     {
         player = GameObject.FindWithTag("Player");
         playerState = player.GetComponent<PlayerState>();
+        anim = GetComponentInChildren<Animator>();
         cam = Camera.main;
         sr = GetComponentInChildren<SpriteRenderer>();
     }
@@ -37,16 +43,18 @@ public class EnemyFSM : MonoBehaviour
     void Start()
     {
         state = EnemyState.selectPatrolRoute;
+        finishedAnim = false;
     }
     void Update()
     {
-        if (Vector3.Distance(player.transform.position, transform.position) < maxDistanceToPlayer)
+        if (Vector3.Distance(player.transform.position, transform.position) < maxDistanceToPlayer && state != EnemyState.inPain)
         {
             state = EnemyState.persuing;
         }
         switch (state)
         {
             case EnemyState.idle:
+                finishedAnim= false;
                 break;
             case EnemyState.attacking:
                 break;
@@ -81,9 +89,20 @@ public class EnemyFSM : MonoBehaviour
                 if (transform.position == patrolPointOne)
                     state = EnemyState.walkingToPoint2;
                 break;
-            case EnemyState.inPain: 
+            case EnemyState.inPain:
+                canDamage = false;
+                anim.Play("enemyDamaged");
+                if (finishedAnim)
+                {
+                    pain++;
+                    state = EnemyState.persuing;
+                }
+
                 break;
             case EnemyState.persuing:
+                finishedAnim = false;
+                canDamage = true;
+                anim.Play("enemy1Run");
                 FollowPlayer();
                 break;
                
@@ -94,7 +113,7 @@ public class EnemyFSM : MonoBehaviour
     private void FollowPlayer()
     {
         var directionToPlayer = player.transform.position - transform.position;
-        if(Vector2.Distance(player.transform.position, transform.position) > 0.5f)
+        if(Vector2.Distance(player.transform.position, transform.position) > 0.7f)
         {
             transform.Translate(directionToPlayer * Time.deltaTime * speed, Space.Self);
             if(directionToPlayer.x < 0f)
@@ -113,24 +132,26 @@ public class EnemyFSM : MonoBehaviour
         patrolPointTwo = transform.position + new Vector3(Random.Range(-10,10),0,0);
         if(cam.WorldToViewportPoint(patrolPointTwo).x > 0 && cam.WorldToViewportPoint(patrolPointTwo).x < 1)
         {
-            print("success " + patrolPointTwo);
             state = EnemyState.walkingToPoint2;
             return;
         }
         else
         {
-            print("failed " + patrolPointTwo);
             return;
         }
     }   
-    void OnTriggerEnter2D(Collider2D col)
+
+    void OnTriggerStay2D(Collider2D col)
     {
-        if(col.tag == "PlayerSword")
-        {
-            if (playerState.currentlyAttacking)
+
+            if (col.tag == "PlayerSword")
             {
-                print("hit");
-            }
-        }
+                if (playerState.canDealDamageToEnemy && !finishedAnim)
+                {
+                    if(canDamage)
+                    state = EnemyState.inPain;
+                }             
+            }       
     }
+
 }

@@ -12,6 +12,7 @@ public class PlayerState : MonoBehaviour
     
     //State---------------
     public State currentState;
+    public bool canDealDamageToEnemy;
     //--------------------
    
     //private fields------
@@ -73,25 +74,31 @@ public class PlayerState : MonoBehaviour
     {
         if(inputQueue.Count > 4)
         {
+            canDealDamageToEnemy = false;
+            inputbuffer= 0;
             inputQueue.Clear();
         }
         switch (currentState)
         {
             case State.idle:
                 isAcceptingInput = true;
+                currentlyAttacking= false;
+                VerifyStateRequest();
+
                 if (move.IsInProgress())
                 {
                     currentState = State.moving;
                 }
-                VerifyStateRequest();
                 break;
             case State.moving:
                 isAcceptingInput = true;
+                currentlyAttacking = false;
+
+                VerifyStateRequest();
                 if(!move.IsInProgress())
                 {
                     currentState = State.idle;
                 }
-                VerifyStateRequest();
                 break;
             case State.dashAttack:
                 UpdateInputDuringAttack();
@@ -159,9 +166,11 @@ public class PlayerState : MonoBehaviour
         //And for each subsequent input, 
         //increment the attack types for a chain attack.
         //eg: attack 1, attack 2, attack 3.
+        
         inputbuffer++;
         if (isAcceptingInput)
         {
+            
             if (inputbuffer==1)
             {
                     inputQueue.Enqueue(State.attack1);
@@ -186,6 +195,7 @@ public class PlayerState : MonoBehaviour
             if (inputQueue.Count != 0)
             {
                 currentlyAttacking = true; //preemptive currentlyattacking flag
+                
                 currentState = inputQueue.Dequeue();
             }
         }        
@@ -206,6 +216,7 @@ public class PlayerState : MonoBehaviour
     {
         //end of the attack happened, used for initiating the next attack in a sequence.
         currentlyAttacking = false;
+        canDealDamageToEnemy = false;
     }
     //--------------------------------------------
 

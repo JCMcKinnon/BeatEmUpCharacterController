@@ -13,8 +13,7 @@ public class PlayerMovement : MonoBehaviour
     private InputAction move;
     SpriteRenderer sr;
     public BoxCollider2D col;
-
-    private bool hitEnemy;
+    public bool hitEnemy;
     void Awake()
     {
         sr = GetComponentInChildren<SpriteRenderer>();
@@ -41,8 +40,11 @@ public class PlayerMovement : MonoBehaviour
         }
         //if dash attacking or ranged attacking
         //slow down movement
-        if (playerState.currentState == PlayerState.State.dashAttack || playerState.currentState == PlayerState.State.rangedAttack || playerState.currentState == PlayerState.State.attack1
-            || playerState.currentState == PlayerState.State.attack2 || playerState.currentState == PlayerState.State.attack3)
+        if (playerState.currentState == PlayerState.State.dashAttack 
+            || playerState.currentState == PlayerState.State.rangedAttack 
+            || playerState.currentState == PlayerState.State.attack1
+            || playerState.currentState == PlayerState.State.attack2 
+            || playerState.currentState == PlayerState.State.attack3)
         {
             dir = move.ReadValue<Vector2>();
             transform.Translate(dir * 0.3f * Time.deltaTime, Space.Self);
@@ -62,24 +64,27 @@ public class PlayerMovement : MonoBehaviour
             moving = false;
         }
         //if dash attacking, make player dash in direction sprite is facing
-        if(playerState.currentState == PlayerState.State.dashAttack && !hitEnemy)
+        if(playerState.currentState == PlayerState.State.dashAttack)
         {
             int flipX = sr.flipX == true ? -1 : 1;
-            if(playerState.currentState == PlayerState.State.dashAttack)
+            if(!hitEnemy)
             {
                 transform.Translate(transform.right * flipX * Time.deltaTime * 6.5f);
             }
+            else
+            {
+                return;
+            }
         }
+
         if (sr.flipX)
         {
             col.offset = new Vector2(-0.8f, 0.1f);
-            print("aser");
 
         }
         else
         {
             col.offset = new Vector2(0, 0.1f);
-            print("aser");
         }
     }
 
@@ -87,26 +92,35 @@ public class PlayerMovement : MonoBehaviour
     {
         if (dir.x < 0)
         {
-            var sr = GetComponentInChildren<SpriteRenderer>(); //TODO: put the getcomponent calls in awake
+            
             sr.flipX = true;
         }
         if (dir.x > 0)
         {
-            var sr = GetComponentInChildren<SpriteRenderer>();
+            
             sr.flipX = false;
         }
     }
-    void OnTriggerEnter2D(Collider2D col)
+    void OnTriggerStay2D(Collider2D col)
     {
         if(col.tag == "Enemy")
         {
-            hitEnemy = true;
-            StartCoroutine(SetHitEnemyFlag());
+            if (playerState.currentlyAttacking)
+            {
+                hitEnemy = true;
+                print(hitEnemy);
+                StartCoroutine(SetHitEnemyFlag());
+            }
+            
         }
     }
     public IEnumerator SetHitEnemyFlag()
     {
+
         yield return new WaitForSeconds(0.1f);
-        hitEnemy= false;
+        hitEnemy = false;
+        
+        //playerState.canDealDamageToEnemy = false;
+        //playerState.currentlyAttacking = false;
     }
 }

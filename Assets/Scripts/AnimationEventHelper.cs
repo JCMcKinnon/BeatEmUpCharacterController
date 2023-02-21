@@ -45,4 +45,8 @@ public class AnimationEventHelper : MonoBehaviour
     {
         ps.AttackFinished();
     }
+    public void canDealDamageToEnemy()
+    {
+        ps.canDealDamageToEnemy = true;
+    }
 }
