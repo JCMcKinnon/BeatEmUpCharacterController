@@ -81,6 +81,8 @@ MonoBehaviour:
   currentState: 0
   canDealDamageToEnemy: 0
   currentlyAttacking: 0
+  maxAttackBufferSize: 5
+  maxSecondsBetweenDash: 5
 --- !u!114 &2453108500011357864
 MonoBehaviour:
   m_ObjectHideFlags: 0

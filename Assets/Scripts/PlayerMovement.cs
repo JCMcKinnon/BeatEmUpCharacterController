@@ -41,14 +41,19 @@ public class PlayerMovement : MonoBehaviour
         //if dash attacking or ranged attacking
         //slow down movement
         if (playerState.currentState == PlayerState.State.dashAttack 
-            || playerState.currentState == PlayerState.State.rangedAttack 
-            || playerState.currentState == PlayerState.State.attack1
-            || playerState.currentState == PlayerState.State.attack2 
+            || playerState.currentState == PlayerState.State.rangedAttack )
+        {
+            dir = move.ReadValue<Vector2>();
+            transform.Translate(dir * 0.5f * Time.deltaTime, Space.Self);
+        }
+        if ( playerState.currentState == PlayerState.State.attack1
+            || playerState.currentState == PlayerState.State.attack2
             || playerState.currentState == PlayerState.State.attack3)
         {
             dir = move.ReadValue<Vector2>();
-            transform.Translate(dir * 0.3f * Time.deltaTime, Space.Self);
+            transform.Translate(dir * 0.2f * Time.deltaTime, Space.Self);
         }
+                   
         //if input is bigger than zero, move and flip sprite based on direction
         if (dir != Vector2.zero)
         {
@@ -108,11 +113,15 @@ public class PlayerMovement : MonoBehaviour
             if (playerState.currentlyAttacking)
             {
                 hitEnemy = true;
-                print(hitEnemy);
-                StartCoroutine(SetHitEnemyFlag());
+
             }
             
         }
+    }
+    void OnTriggerExit2D()
+    {
+        StartCoroutine(SetHitEnemyFlag());
+
     }
     public IEnumerator SetHitEnemyFlag()
     {

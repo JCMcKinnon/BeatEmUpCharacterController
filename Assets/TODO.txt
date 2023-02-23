@@ -1,0 +1,1 @@
+player doesnt reset attack buffer/queue if moving while/right after attacking, it seems like especialy if attacking enemy.

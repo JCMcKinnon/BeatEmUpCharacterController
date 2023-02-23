@@ -18,6 +18,7 @@ public class PlayerState : MonoBehaviour
     //private fields------
     private bool isAcceptingInput;
     public bool currentlyAttacking;
+    private float dashTimer;
     //--------------------
 
     //input---------------
@@ -31,6 +32,10 @@ public class PlayerState : MonoBehaviour
     [SerializeField] public Queue<State> inputQueue;
     int inputbuffer;
     //--------------------
+
+    public int maxAttackBufferSize;
+    [SerializeField] private float maxSecondsBetweenDash;
+
     public enum State { 
         idle,
         moving, 
@@ -72,6 +77,7 @@ public class PlayerState : MonoBehaviour
     }
     void Update()
     {
+        print("queue: " + inputQueue.Count + " Count: " + inputbuffer);
         if(inputQueue.Count > 4)
         {
             canDealDamageToEnemy = false;
@@ -95,7 +101,8 @@ public class PlayerState : MonoBehaviour
                 currentlyAttacking = false;
 
                 VerifyStateRequest();
-                if(!move.IsInProgress())
+                inputbuffer = 0;
+                if (!move.IsInProgress())
                 {
                     currentState = State.idle;
                 }
@@ -123,6 +130,8 @@ public class PlayerState : MonoBehaviour
             default:
                 break;
         }
+        dashTimer -= Time.deltaTime;
+        print(dashTimer);
     }
     private void UpdateInputDuringAttack()
     {
@@ -147,18 +156,31 @@ public class PlayerState : MonoBehaviour
     {
         if (!currentlyAttacking)
         {
+            
             currentState = State.moving;
         }
     }
     public void SetDashAttack(InputAction.CallbackContext context)
     {
         if (isAcceptingInput)
-            inputQueue.Enqueue(State.dashAttack);
+        {
+            if(inputQueue.Count < maxAttackBufferSize && dashTimer < 0)
+            {
+                dashTimer = maxSecondsBetweenDash;
+
+                inputQueue.Enqueue(State.dashAttack);
+            }
+        }
     }
     public void SetRangedAttack(InputAction.CallbackContext context)
     {
-        if (isAcceptingInput)           
-            inputQueue.Enqueue(State.rangedAttack);
+        if (isAcceptingInput)
+        {
+            if (inputQueue.Count < maxAttackBufferSize)
+            {
+                inputQueue.Enqueue(State.rangedAttack);
+            }
+        }
     }
     public void BasicAttack(InputAction.CallbackContext context)
     {
@@ -166,24 +188,42 @@ public class PlayerState : MonoBehaviour
         //And for each subsequent input, 
         //increment the attack types for a chain attack.
         //eg: attack 1, attack 2, attack 3.
-        
+
         inputbuffer++;
         if (isAcceptingInput)
         {
             
             if (inputbuffer==1)
             {
-                    inputQueue.Enqueue(State.attack1);
+                if (isAcceptingInput)
+                {
+                    if (inputQueue.Count < maxAttackBufferSize)
+                    {
+                        inputQueue.Enqueue(State.attack1);
+                    }
+                }
                     return;               
             }      
             if(inputbuffer==2)
             {
-                    inputQueue.Enqueue(State.attack2);
-                    return;            
+                if (isAcceptingInput)
+                {
+                    if (inputQueue.Count < maxAttackBufferSize)
+                    {
+                        inputQueue.Enqueue(State.attack2);
+                    }
+                }
+                return;            
             }
             if(inputbuffer==3)
-            {                
-                inputQueue.Enqueue(State.attack3);
+            {
+                if (isAcceptingInput)
+                {
+                    if (inputQueue.Count < maxAttackBufferSize)
+                    {
+                        inputQueue.Enqueue(State.attack3);
+                    }
+                }
                 return;              
             }
         }
@@ -219,5 +259,4 @@ public class PlayerState : MonoBehaviour
         canDealDamageToEnemy = false;
     }
     //--------------------------------------------
-
 }
